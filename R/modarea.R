@@ -17,10 +17,14 @@ modarea <- function(x, y, m, xSD, mSD, K) {
   areaU_boot = rnorm(K,0,0)
   areaS_boot = rnorm(K,0,0)
 
+  oldw <- getOption("warn")
+  options(warn = -1)
+  
   for (j in seq(from=1, to=K, by=1)) {
     x = sample(x, length(x), replace=TRUE)
     y = sample(y, length(y), replace=TRUE)
     m = sample(m, length(m), replace=TRUE)
+    
     tryCatch({
       linearMod <- lm(y ~ x + m + x:m)}, error=function(e){})
     tryCatch({
@@ -50,5 +54,6 @@ modarea <- function(x, y, m, xSD, mSD, K) {
   print(paste("p-value<0.05:   ", round(mean(abs(areaU) < abs(areaU_boot)),digits=4)),quote=FALSE)
   print("",quote=FALSE)
   print("---------------------------------------------------",quote=FALSE)
+  options(warn = oldw)
 }
 
