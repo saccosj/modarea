@@ -39,7 +39,7 @@ modarea <- function(x, y, m, xSD, mSD, K) {
   }
   print("---------------------------------------------------",quote=FALSE)
   print("", quote=FALSE)
-  print("Moderation Area Ver 0.0.1",quote=FALSE)
+  print("Moderation Area Ver 0.0.2",quote=FALSE)
   print("Created by: Shane J Sacco, MA. University of Connecticut",quote=FALSE)
   print("",quote=FALSE)
   print("Multiple Regression:",quote=FALSE)
