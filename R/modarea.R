@@ -26,10 +26,10 @@ modarea <- function(x, y, m, xSD, mSD, K) {
     tryCatch({
       linearMod <- lm(y ~ x + m + x:m)}, error=function(e){})
     tryCatch({
-      suppressWarnings(b0t      =  summary(linearMod)$coefficients[1,1])
-      suppressWarnings(b1t      =  summary(linearMod)$coefficients[2,1])
-      suppressWarnings(b2t      =  summary(linearMod)$coefficients[3,1])
-      suppressWarnings(b3t      =  summary(linearMod)$coefficients[4,1])
+      suppressWarnings({b0t      =  summary(linearMod)$coefficients[1,1]
+      b1t      =  summary(linearMod)$coefficients[2,1]
+      b2t      =  summary(linearMod)$coefficients[3,1]
+      b3t      =  summary(linearMod)$coefficients[4,1]})
       areaU_boot [j] = b3t*xSD^2*mSD +((b2t^2*mSD)/b3t)
       areaS_boot [j] = (b3t*xSD^2*mSD +((b2t^2*mSD)/b3t))/(xSD^2*mSD^2)
       }, error=function(e){})
