@@ -24,12 +24,12 @@ modarea <- function(x, y, m, xSD, mSD, K) {
     tryCatch({
       linearMod <- lm(y ~ x + m + x*m)}, error=function(e){})
     tryCatch({
-      b0      =  summary(linearMod)$coefficients[1,1]
-      b1      =  summary(linearMod)$coefficients[2,1]
-      b2      =  summary(linearMod)$coefficients[3,1]
-      b3      =  summary(linearMod)$coefficients[4,1]
-      areaU_boot [j] = b3*xSD^2*mSD +((b2^2*mSD)/b3)
-      areaS_boot [j] = (b3*xSD^2*mSD +((b2^2*mSD)/b3))/(xSD^2*mSD^2)
+      b0t      =  summary(linearMod)$coefficients[1,1]
+      b1t      =  summary(linearMod)$coefficients[2,1]
+      b2t      =  summary(linearMod)$coefficients[3,1]
+      b3t      =  summary(linearMod)$coefficients[4,1]
+      areaU_boot [j] = b3t*xSD^2*mSD +((b2t^2*mSD)/b3t)
+      areaS_boot [j] = (b3t*xSD^2*mSD +((b2t^2*mSD)/b3t))/(xSD^2*mSD^2)
       }, error=function(e){})
     j= j+1
   }
