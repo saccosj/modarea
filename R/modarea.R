@@ -4,7 +4,7 @@ modarea <- function(x, y, m, xSD, mSD, K) {
   y = scale (y)
   m = scale (m)
 
-  linearMod <- lm(y ~ x + m + x*m)
+  linearMod <- lm(y ~ x + m + x:m)
 
   b0      =  summary(linearMod)$coefficients[1,1]
   b1      =  summary(linearMod)$coefficients[2,1]
@@ -22,7 +22,7 @@ modarea <- function(x, y, m, xSD, mSD, K) {
     y = sample(y, length(y), replace=TRUE)
     m = sample(m, length(m), replace=TRUE)
     tryCatch({
-      linearMod <- lm(y ~ x + m + x*m)}, error=function(e){})
+      linearMod <- lm(y ~ x + m + x:m)}, error=function(e){})
     tryCatch({
       b0t      =  summary(linearMod)$coefficients[1,1]
       b1t      =  summary(linearMod)$coefficients[2,1]
