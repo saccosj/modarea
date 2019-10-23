@@ -17,8 +17,6 @@ modarea <- function(x, y, m, xSD, mSD, K) {
   areaU_boot = rnorm(K,0,0)
   areaS_boot = rnorm(K,0,0)
 
-  oldw <- getOption("warn")
-  options(warn = -1)
   
   for (j in seq(from=1, to=K, by=1)) {
     x = sample(x, length(x), replace=TRUE)
@@ -28,10 +26,10 @@ modarea <- function(x, y, m, xSD, mSD, K) {
     tryCatch({
       linearMod <- lm(y ~ x + m + x:m)}, error=function(e){})
     tryCatch({
-      b0t      =  summary(linearMod)$coefficients[1,1]
-      b1t      =  summary(linearMod)$coefficients[2,1]
-      b2t      =  summary(linearMod)$coefficients[3,1]
-      b3t      =  summary(linearMod)$coefficients[4,1]
+      suppressWarnings(b0t      =  summary(linearMod)$coefficients[1,1])
+      suppressWarnings(b1t      =  summary(linearMod)$coefficients[2,1])
+      suppressWarnings(b2t      =  summary(linearMod)$coefficients[3,1])
+      suppressWarnings(b3t      =  summary(linearMod)$coefficients[4,1])
       areaU_boot [j] = b3t*xSD^2*mSD +((b2t^2*mSD)/b3t)
       areaS_boot [j] = (b3t*xSD^2*mSD +((b2t^2*mSD)/b3t))/(xSD^2*mSD^2)
       }, error=function(e){})
@@ -43,17 +41,16 @@ modarea <- function(x, y, m, xSD, mSD, K) {
   print("Created by: Shane J Sacco, MA. University of Connecticut",quote=FALSE)
   print("",quote=FALSE)
   print("Multiple Regression:",quote=FALSE)
-  print(paste("b0: ", round(b0,digits=4)),quote=FALSE)
-  print(paste("b1: ", round(b1,digits=4)),quote=FALSE)
-  print(paste("b2: ", round(b2,digits=4)),quote=FALSE)
-  print(paste("b3: ", round(b3,digits=4)),quote=FALSE)
+  print(paste("b0: ", format(round(b0,digits=4),nsmall=3)),quote=FALSE)
+  print(paste("b1: ", format(round(b1,digits=4),nsmall=3)),quote=FALSE)
+  print(paste("b2: ", format(round(b2,digits=4),nsmall=3)),quote=FALSE)
+  print(paste("b3: ", format(round(b3,digits=4),nsmall=3)),quote=FALSE)
   print("",quote=FALSE)
   print("Area:",quote=FALSE)
   print(paste("Unstandardized: ", round(areaU,digits=4)),quote=FALSE)
   print(paste("Standardized:   ", round(areaS,digits=4)),quote=FALSE)
-  print(paste("p-value<0.05:   ", round(mean(abs(areaU) < abs(areaU_boot)),digits=4)),quote=FALSE)
+  print(paste("p-value<0.05:   ", format(round(mean(abs(areaU) < abs(areaU_boot)),digits=4),nsmall=4)),quote=FALSE)
   print("",quote=FALSE)
   print("---------------------------------------------------",quote=FALSE)
-  options(warn = oldw)
 }
 
