@@ -69,15 +69,13 @@ University of Connecticut
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+x1 = rnorm(1000,0,1)
+m1 = rnorm(1000,0,1)
+e1 = rnorm(1000,0,1)
+y1 = x1 + m1 + x1*m1 + e1
 
-## The function is currently defined as
-function (x)
-{
-  }
-}
+modarea(x1, y1, m1, 1, 1, 10000)
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
