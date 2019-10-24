@@ -10,19 +10,24 @@ modarea <- function(x, y, m, xSD, mSD, K) {
   b1      =  summary(linearMod)$coefficients[2,1]
   b2      =  summary(linearMod)$coefficients[3,1]
   b3      =  summary(linearMod)$coefficients[4,1]
-  areaU <- b3*xSD^2*mSD +((b2^2*mSD)/b3)
-  areaS <- (b3*xSD^2*mSD +((b2^2*mSD)/b3))/(xSD^2*mSD^2)
-
+  if (abs(b3) >= abs(b2)) {
+    areaU <- abs(b3*xSD^2*mSD +((b2^2*mSD)/b3))
+    areaS <- abs((b3*xSD^2*mSD +((b2^2*mSD)/b3))/(xSD^2*mSD^2))
+  }
+  else if (abs(b2) > abs(b3)){
+    areaU <- abs((2*b3*xSD*mSD)*(2*xSD))
+    areaS <- abs(((2*b3*xSD*mSD)*(2*xSD))/(xSD^2*mSD^2))
+  }
   j=0
   areaU_boot = rnorm(K,0,0)
   areaS_boot = rnorm(K,0,0)
 
-  
+
   for (j in seq(from=1, to=K, by=1)) {
     x = sample(x, length(x), replace=TRUE)
     y = sample(y, length(y), replace=TRUE)
     m = sample(m, length(m), replace=TRUE)
-    
+
     tryCatch({
       linearMod <- lm(y ~ x + m + x:m)}, error=function(e){})
     tryCatch({
@@ -30,8 +35,14 @@ modarea <- function(x, y, m, xSD, mSD, K) {
       b1t      =  summary(linearMod)$coefficients[2,1]
       b2t      =  summary(linearMod)$coefficients[3,1]
       b3t      =  summary(linearMod)$coefficients[4,1]})
-      areaU_boot [j] = b3t*xSD^2*mSD +((b2t^2*mSD)/b3t)
-      areaS_boot [j] = (b3t*xSD^2*mSD +((b2t^2*mSD)/b3t))/(xSD^2*mSD^2)
+      if (abs(b3t) >= abs(b2t)) {
+        areaU_boot [j] <- abs(b3t*xSD^2*mSD +((b2t^2*mSD)/b3t))
+        areaS_boot [j] <- abs((b3t*xSD^2*mSD +((b2t^2*mSD)/b3t))/(xSD^2*mSD^2))
+      }
+      else if (abs(b2t) > abs(b3t)) {
+        areaU_boot [j] <- abs((2*b3t*xSD*mSD)*(2*xSD))
+        areaS_boot [j] <- abs(((2*b3t*xSD*mSD)*(2*xSD))/(xSD^2*mSD^2))
+      }
       }, error=function(e){})
     j= j+1
   }
@@ -49,8 +60,7 @@ modarea <- function(x, y, m, xSD, mSD, K) {
   print("Area:",quote=FALSE)
   print(paste("Unstandardized: ", round(areaU,digits=4)),quote=FALSE)
   print(paste("Standardized:   ", round(areaS,digits=4)),quote=FALSE)
-  print(paste("p-value<0.05:   ", format(round(mean(abs(areaU) < abs(areaU_boot)),digits=4),nsmall=4)),quote=FALSE)
+  print(paste("p-value<0.05:   ", format(round(mean(abs(areaS) < abs(areaS_boot)),digits=4),nsmall=4)),quote=FALSE)
   print("",quote=FALSE)
   print("---------------------------------------------------",quote=FALSE)
 }
-
